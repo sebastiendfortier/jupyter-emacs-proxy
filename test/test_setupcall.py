@@ -8,4 +8,4 @@ def test_setupcall():
     os.environ["XPRA_BIN"] = "xpra"
 
     print("\nRunning test_setupcall...")
-    print(jx.setup_gui_app())
+    print(js.setup_gui_app())
