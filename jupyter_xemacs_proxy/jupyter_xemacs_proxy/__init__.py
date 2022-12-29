@@ -32,31 +32,31 @@ def get_executable(prog):
     raise FileNotFoundError(f'Could not find {prog} in PATH')
 
 
-def _gui_app_urlparams():
+def _xemacs_urlparams():
     from getpass import getuser
 
     url_params = '?' + '&'.join([
         'username=' + getuser(),
-        'password=' + _gui_app_passwd,
+        'password=' + _xemacs_passwd,
         'encryption=AES',
-        'key=' + _gui_app_aeskey,
+        'key=' + _xemacs_aeskey,
         'sharing=true',
     ])
 
     return url_params
 
 
-def _gui_app_mappath(path):
+def _xemacs_mappath(path):
 
     # always pass the url parameter
     if path in ('/', '/index.html', ):
-        url_params = _gui_app_urlparams()
+        url_params = _xemacs_urlparams()
         path = '/index.html' + url_params
 
     return path
 
 
-def setup_gui_app():
+def setup_xemacs():
     """ Setup commands and and return a dictionary compatible
         with jupyter-server-proxy.
     """
@@ -65,7 +65,7 @@ def setup_gui_app():
     from random import choice
     from string import ascii_letters, digits
 
-    global _gui_app_passwd, _gui_app_aeskey
+    global _xemacs_passwd, _xemacs_aeskey
 
     # password generator
     def _get_random_alphanumeric_string(length):
@@ -77,7 +77,7 @@ def setup_gui_app():
     logger.info('Created secure socket directory for Xpra: ' + socket_path)
 
     # generate file with random one-time-password
-    _gui_app_passwd = _get_random_alphanumeric_string(16)
+    _xemacs_passwd = _get_random_alphanumeric_string(16)
     try:
         fd_passwd, fpath_passwd = mkstemp()
         logger.info('Created secure password file for Xpra: ' + fpath_passwd)
@@ -90,21 +90,21 @@ def setup_gui_app():
         raise FileNotFoundError("Passwd generation in temp file FAILED")
 
     # generate file with random encryption key
-    _gui_app_aeskey = _get_random_alphanumeric_string(16)
+    _xemacs_aeskey = _get_random_alphanumeric_string(16)
     try:
         fd_aeskey, fpath_aeskey = mkstemp()
         logger.info('Created secure encryption key file for Xpra: ' + fpath_aeskey)
 
         with open(fd_aeskey, 'w') as f:
-            f.write(_gui_app_aeskey)
+            f.write(_xemacs_aeskey)
 
     except Exception:
         logger.error("Encryption key generation in temp file FAILED")
         raise FileNotFoundError("Encryption key generation in temp file FAILED")
 
     # launchers url file including url parameters
-    path_info = 'xprahtml5/index.html' + _gui_app_urlparams()
-
+    path_info = 'xprahtml5/index.html' + _xemacs_urlparams()
+    _ = get_executable('xemacs')
     # create command
     cmd = [
         get_executable('xpra'),
@@ -114,7 +114,7 @@ def setup_gui_app():
         # '--socket-dir="' + socket_path + '/"',  # fixme: socket_dir not recognized
         # '--server-idle-timeout=86400',  # stop server after 24h with no client connection
         # '--exit-with-client=yes',  # stop Xpra when the browser disconnects
-        '--start=xterm -fa "DejaVu Sans Mono" -fs 14',
+        '--start=xemacs',
         # '--start-child=xterm', '--exit-with-children',
         '--tcp-auth=file:filename=' + fpath_passwd,
         '--tcp-encryption=AES',
@@ -139,13 +139,13 @@ def setup_gui_app():
             'XDG_RUNTIME_DIR': socket_path,
         },
         'command': cmd,
-        'mappath': _gui_app_mappath,
+        'mappath': _xemacs_mappath,
         'absolute_url': False,
         'timeout': 90,
         'new_browser_tab': True,
         'launcher_entry': {
             'enabled': True,
-            'icon_path': os.path.join(HERE, 'icons/logo.svg'),
+            'icon_path': os.path.join(HERE, 'icons/emacs-logo.svg'),
             'title': 'Xpra Desktop',
             'path_info': path_info,
         },

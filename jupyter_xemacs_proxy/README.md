@@ -1,6 +1,6 @@
-![build](https://github.com/sebastiendfortier/jupyter-gui-app-proxy/workflows/build/badge.svg)
+![build](https://github.com/sebastiendfortier/jupyter-gui-app-proxy/jupyter-xemacs-proxy/workflows/build/badge.svg)
 
-# jupyter-gui-app-proxy
+# jupyter-xemacs-proxy
 Integrate Xpra in your Jupyter environment for an fast, feature-rich and easy to use gui apps in the browser.
 
 ## Requirements
@@ -9,12 +9,12 @@ Integrate Xpra in your Jupyter environment for an fast, feature-rich and easy to
 - JupyterLab >= 3.x
 - jupyter-server-proxy >= 3.1.0
 
-This package executes the `xpra` and `start_gui_app.sh` command. This command assumes the `xpra` command is available in the environment's $PATH.
+This package executes the `xpra` and `xemacs.sh` command. This command assumes `xpra` and `xemacs` commands are available in the environment's $PATH.
 
 ## Security
 [Xpra](https://xpra.org/) supports password and encryption.  
 Both are NOT required, if you can trust _everyone_, who can log in to the host where your JupyterLab is running.
-(incl. [jupyter-server-proxy](https://github.com/jupyterhub/jupyter-server-proxy), [jupyter-gui-app-proxy](https://github.com/sebastiendfortier/jupyter-sigularity-gui-proxy) and [Xpra-HTML5](https://xpra.org/))
+(incl. [jupyter-server-proxy](https://github.com/jupyterhub/jupyter-server-proxy), [jupyter-xemacs-proxy](https://github.com/sebastiendfortier/jupyter-sigularity-gui-proxy) and [Xpra-HTML5](https://xpra.org/))
   
 **BUT (!!!)**  
 if you are on a multiuser system, where you CANNOT trust everyone,  
@@ -22,7 +22,7 @@ you must(!) ensure that your Xpra session is secured by at least a password.
 
 Currently this requires 
 - that [jupyter-server-proxy](https://github.com/jupyterhub/jupyter-server-proxy) includes this [pull request](https://github.com/jupyterhub/jupyter-server-proxy/pull/226) and 
-- you use jupyter-gui-app-proxy with a version number >= 0.3.0 (not on pypi)
+- you use jupyter-xemacs-proxy with a version number >= 0.3.0 (not on pypi)
 
 ### Xpra
 [Xpra](https://xpra.org/) is an open-source multi-platform persistent *remote display* solution for forwarding applications and desktop screens. It allows you to run X11 programs, usually on a remote host, and direct their display to your local machine.  
@@ -39,12 +39,12 @@ virtualenv -p python3 venv
 source venv/bin/activate
 ```
 
-#### Install jupyter-gui-app-proxy
+#### Install jupyter-xemacs-proxy
 ```
-pip install git+https://github.com/sebastiendfortier/jupyter-gui-app-proxy.git
+pip install git+https://github.com/sebastiendfortier/jupyter-gui-app-proxy/jupyter-xemacs-proxy.git
 ```
 
-#### Enable jupyter-gui-app-proxy Extensions
+#### Enable jupyter-xemacs-proxy Extensions
 For Jupyter Classic, activate the jupyter-server-proxy extension:
 ```
 jupyter serverextension enable --sys-prefix jupyter_server_proxy
@@ -62,7 +62,7 @@ Connect to your database as instructed in the Quickstart section.
 
 ## Configuration
 This package calls `xpra` with a bunch of settings. Please read the [Xpra manual](https://xpra.org/manual.html) if you want to know the details.  
-You have to modify `setup_gui_app()` in `jupyter_gui_app_proxy/__init__.py` for change.
+You have to modify `setup_xemacs()` in `jupyter_xemacs_proxy/__init__.py` for change.
 
 ## Credits
 - Xpra
