@@ -13,6 +13,8 @@ def get_executable(prog):
     # Find prog in known locations
     other_paths = [
         os.path.join('/opt/xpra/bin', prog),
+        os.path.join('/bin', prog),
+        os.path.join('/usr/bin', prog),
     ]
 
     wp = os.path.join(HERE, 'bin', prog)
@@ -32,31 +34,31 @@ def get_executable(prog):
     raise FileNotFoundError(f'Could not find {prog} in PATH')
 
 
-def _xemacs_urlparams():
+def _gvim_urlparams():
     from getpass import getuser
 
     url_params = '?' + '&'.join([
         'username=' + getuser(),
-        'password=' + _xemacs_passwd,
+        'password=' + _gvim_passwd,
         'encryption=AES',
-        'key=' + _xemacs_aeskey,
+        'key=' + _gvim_aeskey,
         'sharing=true',
     ])
 
     return url_params
 
 
-def _xemacs_mappath(path):
+def _gvim_mappath(path):
 
     # always pass the url parameter
     if path in ('/', '/index.html', ):
-        url_params = _xemacs_urlparams()
+        url_params = _gvim_urlparams()
         path = '/index.html' + url_params
 
     return path
 
 
-def setup_xemacs():
+def setup_gvim():
     """ Setup commands and and return a dictionary compatible
         with jupyter-server-proxy.
     """
@@ -65,7 +67,7 @@ def setup_xemacs():
     from random import choice
     from string import ascii_letters, digits
 
-    global _xemacs_passwd, _xemacs_aeskey
+    global _gvim_passwd, _gvim_aeskey
 
     # password generator
     def _get_random_alphanumeric_string(length):
@@ -77,7 +79,7 @@ def setup_xemacs():
     logger.info('Created secure socket directory for Xpra: ' + socket_path)
 
     # generate file with random one-time-password
-    _xemacs_passwd = _get_random_alphanumeric_string(16)
+    _gvim_passwd = _get_random_alphanumeric_string(16)
     try:
         fd_passwd, fpath_passwd = mkstemp()
         logger.info('Created secure password file for Xpra: ' + fpath_passwd)
@@ -90,21 +92,21 @@ def setup_xemacs():
         raise FileNotFoundError("Passwd generation in temp file FAILED")
 
     # generate file with random encryption key
-    _xemacs_aeskey = _get_random_alphanumeric_string(16)
+    _gvim_aeskey = _get_random_alphanumeric_string(16)
     try:
         fd_aeskey, fpath_aeskey = mkstemp()
         logger.info('Created secure encryption key file for Xpra: ' + fpath_aeskey)
 
         with open(fd_aeskey, 'w') as f:
-            f.write(_xemacs_aeskey)
+            f.write(_gvim_aeskey)
 
     except Exception:
         logger.error("Encryption key generation in temp file FAILED")
         raise FileNotFoundError("Encryption key generation in temp file FAILED")
 
     # launchers url file including url parameters
-    path_info = 'xprahtml5/index.html' + _xemacs_urlparams()
-    _ = get_executable('xemacs')
+    path_info = 'xprahtml5/index.html' + _gvim_urlparams()
+    _ = get_executable('gvim')
     # create command
     cmd = [
         get_executable('xpra'),
@@ -114,7 +116,7 @@ def setup_xemacs():
         # '--socket-dir="' + socket_path + '/"',  # fixme: socket_dir not recognized
         # '--server-idle-timeout=86400',  # stop server after 24h with no client connection
         # '--exit-with-client=yes',  # stop Xpra when the browser disconnects
-        '--start=xemacs',
+        '--start=gvim',
         # '--start-child=xterm', '--exit-with-children',
         '--tcp-auth=file:filename=' + fpath_passwd,
         '--tcp-encryption=AES',
@@ -139,13 +141,13 @@ def setup_xemacs():
             'XDG_RUNTIME_DIR': socket_path,
         },
         'command': cmd,
-        'mappath': _xemacs_mappath,
+        'mappath': _gvim_mappath,
         'absolute_url': False,
         'timeout': 90,
         'new_browser_tab': True,
         'launcher_entry': {
             'enabled': True,
-            'icon_path': os.path.join(HERE, 'icons/emacs-logo.svg'),
+            'icon_path': os.path.join(HERE, 'icons/gvim-logo.svg'),
             'title': 'Xpra Desktop',
             'path_info': path_info,
         },
