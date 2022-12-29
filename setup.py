@@ -20,7 +20,7 @@ setup(
     long_description = long_description,
     long_description_content_type = 'text/markdown',
 
-    keywords = ['jupyter', 'xpra', 'jupyterhub', 'xemacs', 'gvim', 'jupyter-server-proxy'],
+    keywords = ['jupyter', 'jupyterlab', 'xpra', 'jupyterhub', 'xemacs', 'gvim', 'jupyter-server-proxy'],
     classifiers = [
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: BSD License',
@@ -30,8 +30,8 @@ setup(
 
     entry_points = {
         'jupyter_serverproxy_servers': [
-            'gvim = jupyter_gvim_proxy/jupyter_gvim_proxy:setup_gvim',
-            'xemacs = jupyter_xemacs_proxy/jupyter_xemacs_proxy:setup_xemacs',
+            'gvim = jupyter_gvim_proxy:setup_gvim',
+            'xemacs = jupyter_xemacs_proxy:setup_xemacs',
         ]
     },
     python_requires = '>=3.6',

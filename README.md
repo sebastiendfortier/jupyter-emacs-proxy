@@ -1,5 +1,3 @@
-![build](https://github.com/sebastiendfortier/jupyter-gui-app-proxy/workflows/build/badge.svg)
-
 # jupyter-gui-app-proxy
 Integrate Xpra in your Jupyter environment for an fast, feature-rich and easy to use gui apps in the browser.
 
@@ -9,12 +7,12 @@ Integrate Xpra in your Jupyter environment for an fast, feature-rich and easy to
 - JupyterLab >= 3.x
 - jupyter-server-proxy >= 3.1.0
 
-This package executes the `xpra` and `start_gui_app.sh` command. This command assumes the `xpra` command is available in the environment's $PATH.
+This package executes the `xpra`, `gvim` and `xemacs` commands. This command assumes that `xpra`, `gvim` and `xemacs` commands are available in the environment's $PATH.
 
 ## Security
 [Xpra](https://xpra.org/) supports password and encryption.  
 Both are NOT required, if you can trust _everyone_, who can log in to the host where your JupyterLab is running.
-(incl. [jupyter-server-proxy](https://github.com/jupyterhub/jupyter-server-proxy), [jupyter-gui-app-proxy](https://github.com/sebastiendfortier/jupyter-sigularity-gui-proxy) and [Xpra-HTML5](https://xpra.org/))
+(incl. [jupyter-server-proxy](https://github.com/jupyterhub/jupyter-server-proxy), [jupyter-gui-app-proxy](https://github.com/sebastiendfortier/jupyter-gui-app-proxy) and [Xpra-HTML5](https://xpra.org/))
   
 **BUT (!!!)**  
 if you are on a multiuser system, where you CANNOT trust everyone,  
@@ -62,7 +60,7 @@ Connect to your database as instructed in the Quickstart section.
 
 ## Configuration
 This package calls `xpra` with a bunch of settings. Please read the [Xpra manual](https://xpra.org/manual.html) if you want to know the details.  
-You have to modify `setup_gui_app()` in `jupyter_gui_app_proxy/__init__.py` for change.
+You have to modify `setup_xemacs()` in `jupyter_xemacs_proxy/__init__.py` or `setup_gvim()` in `jupyter_gvim_proxy/__init__.py`if this does not fit with your system configuration.
 
 ## Credits
 - Xpra
